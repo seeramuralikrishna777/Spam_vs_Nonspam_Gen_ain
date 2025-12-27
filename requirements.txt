@@ -1,0 +1,9 @@
+fastapi==0.95.2
+uvicorn[standard]==0.22.0
+tensorflow==2.10.0
+numpy
+pandas
+nltk
+jinja2
+python-multipart
+aiofiles

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Spam Detector</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 750px;
+      background: rgba(255, 255, 255, 0.20);
+      padding: 32px;
+      border-radius: 18px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      color: #fff;
+      animation: slideUp 0.8s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity:0; }
+      to { transform: translateY(0); opacity:1; }
+    }
+
+    h1 {
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    label {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      margin-top: 10px;
+      font-size: 15px;
+      resize: vertical;
+      font-family: 'Poppins', sans-serif;
+      transition: 0.3s;
+    }
+
+    textarea:focus {
+      box-shadow: 0 0 10px rgba(255,255,255,0.6);
+    }
+
+    button {
+      padding: 14px 24px;
+      border: none;
+      background: #00e6a7;
+      color: #000;
+      font-weight: 600;
+      font-size: 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: 0.3s;
+      width: 100%;
+    }
+
+    button:hover {
+      background: #00ffbe;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+    }
+
+    .result {
+      margin-top: 22px;
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+      animation: fadeIn 0.7s ease;
+    }
+
+    .spam { color: #ff4d4d; font-weight:700; }
+    .ham { color: #5dff8b; font-weight:700; }
+
+    pre {
+      background: rgba(255,255,255,0.15);
+      padding: 12px;
+      border-radius: 8px;
+      overflow: auto;
+      color: #fff;
+    }
+
+    hr {
+      margin: 25px 0;
+      border: none;
+      height: 1px;
+      background: rgba(255,255,255,0.25);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>📧 Spam Detector (LSTM)</h1>
+
+    <form method="post" action="/predict_form">
+      <label for="message">Enter message to classify:</label>
+      <textarea id="message" name="message" rows="6" placeholder="Type or paste SMS / email text here...">{{ message if message else '' }}</textarea>
+      <button type="submit">Check Spam</button>
+    </form>
+
+    {% if prediction %}
+      <div class="result">
+        <p><strong>Prediction:</strong>
+          <span class="{{ 'spam' if prediction=='SPAM' else 'ham' }}">{{ prediction }}</span>
+        </p>
+        <p><strong>Probability:</strong> {{ probability }}</p>
+      </div>
+    {% endif %}
+
+    <hr>
+    <h3>📌 Use the API</h3>
+    <pre>POST /predict  
+JSON: { "message": "your text" }</pre>
+
+    <p>Example cURL:</p>
+    <pre>curl -X POST -H "Content-Type: application/json" -d '{"message":"Win a prize"}' http://localhost:8000/predict</pre>
+  </div>
+</body>
+</html>
